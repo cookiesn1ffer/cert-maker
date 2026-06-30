@@ -16,7 +16,9 @@ OPEN_ENDPOINTS = {"login", "static", "verify", "verify_cert", "download_cert"}
 
 
 def get_client_ip():
-    return request.headers.get("X-Forwarded-For", request.remote_addr).split(",")[0].strip()
+    forwarded = request.headers.get("X-Forwarded-For")
+    addr = forwarded if forwarded else (request.remote_addr or "127.0.0.1")
+    return addr.split(",")[0].strip()
 
 
 def check_rate_limit(ip: str) -> tuple[bool, int]:

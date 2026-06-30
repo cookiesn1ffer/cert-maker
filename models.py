@@ -1,6 +1,8 @@
 import os
 import hashlib
 import sqlite3
+import ssl
+from urllib.parse import urlparse
 
 DB_PATH = os.environ.get("DB_PATH", "data/certs.db")
 
@@ -17,6 +19,21 @@ def _q(sql):
     return sql.replace("?", "%s") if _pg() else sql
 
 
+def _parse_pg_url():
+    """Parse a postgresql:// URL into pg8000 keyword arguments."""
+    url = urlparse(os.environ["DATABASE_URL"])
+    if url.scheme not in ("postgres", "postgresql"):
+        raise ValueError("DATABASE_URL must use postgresql:// scheme")
+    return {
+        "user": url.username,
+        "password": url.password,
+        "host": url.hostname,
+        "port": url.port or 5432,
+        "database": url.path.lstrip("/") if url.path else "",
+        "ssl_context": ssl.create_default_context(),
+    }
+
+
 # ── Connection context manager ────────────────────────────────────────────────
 
 class _DB:
@@ -24,10 +41,8 @@ class _DB:
 
     def __enter__(self):
         if _pg():
-            import psycopg2
-            import psycopg2.extras
-            self._conn = psycopg2.connect(os.environ["DATABASE_URL"])
-            self._extras = psycopg2.extras
+            import pg8000.dbapi
+            self._conn = pg8000.dbapi.connect(**_parse_pg_url())
         else:
             os.makedirs(os.path.dirname(DB_PATH) or ".", exist_ok=True)
             self._conn = sqlite3.connect(DB_PATH)
@@ -42,20 +57,30 @@ class _DB:
             self._conn.commit()
         self._conn.close()
 
+    @staticmethod
+    def _row_to_dict(cursor, row):
+        if row is None or cursor.description is None:
+            return None
+        columns = [desc[0] for desc in cursor.description]
+        return dict(zip(columns, row))
+
     def run(self, sql, params=()):
-        if _pg():
-            cur = self._conn.cursor(cursor_factory=self._extras.RealDictCursor)
-            cur.execute(_q(sql), params)
-            return cur
-        # sqlite3.Connection.execute respects row_factory
-        return self._conn.execute(_q(sql), params)
+        cur = self._conn.cursor()
+        cur.execute(_q(sql), params)
+        return cur
 
     def one(self, sql, params=()):
-        row = self.run(sql, params).fetchone()
-        return dict(row) if row else None
+        cur = self.run(sql, params)
+        row = cur.fetchone()
+        return self._row_to_dict(cur, row)
 
     def all(self, sql, params=()):
-        return [dict(r) for r in self.run(sql, params).fetchall()]
+        cur = self.run(sql, params)
+        rows = cur.fetchall()
+        if not rows:
+            return []
+        columns = [desc[0] for desc in cur.description]
+        return [dict(zip(columns, row)) for row in rows]
 
 
 # ── Schema ────────────────────────────────────────────────────────────────────

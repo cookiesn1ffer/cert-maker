@@ -1,8 +1,9 @@
-"""Netlify Function: WSGI adapter for Flask (no external dependencies)."""
+"""Netlify Function: WSGI adapter for Flask."""
 import base64
 import io
 import os
 import sys
+import traceback
 
 # In Lambda, all included_files land at /var/task/ alongside this file.
 # Locally, this file is at .../netlify/functions/api.py, so project root is ../../
@@ -15,13 +16,32 @@ else:
 sys.path.insert(0, _root)
 os.chdir(_root)  # Flask resolves templates/ and static/ relative to cwd
 
-from app import app  # noqa: E402
+_import_error = None
+try:
+    from app import app  # noqa: E402
+except Exception as e:  # noqa: BLE001
+    _import_error = traceback.format_exc()
+    app = None
 
 
 _BINARY_TYPES = {"application/pdf", "image/png", "image/jpeg", "image/gif", "image/webp"}
 
 
+def _error_response(message, status=500):
+    return {
+        "statusCode": status,
+        "headers": {"Content-Type": "text/plain; charset=utf-8"},
+        "body": message,
+    }
+
+
 def handler(event, context):
+    if _import_error:
+        return _error_response(
+            f"Flask app failed to import. Check environment variables and build logs.\n\n{_import_error}",
+            500,
+        )
+
     method   = event.get("httpMethod", "GET")
     path     = event.get("path", "/")
     qs       = event.get("queryStringParameters") or {}
@@ -64,8 +84,13 @@ def handler(event, context):
         status_holder[0]  = int(status.split(" ", 1)[0])
         headers_holder[0] = dict(response_headers)
 
-    body_iter  = app(environ, start_response)
-    body_bytes = b"".join(body_iter)
+    try:
+        body_iter  = app(environ, start_response)
+        body_bytes = b"".join(body_iter)
+    except Exception as e:  # noqa: BLE001
+        return _error_response(
+            f"Error handling request: {e}\n\n{traceback.format_exc()}", 500
+        )
 
     content_type = headers_holder[0].get("Content-Type", "")
     is_binary    = any(content_type.startswith(t) for t in _BINARY_TYPES)
