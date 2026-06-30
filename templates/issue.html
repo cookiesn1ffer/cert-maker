@@ -221,7 +221,7 @@
     g('pv-signer').textContent  = signerName || '—';
     g('pv-role').textContent    = v('signer_role') || '';
     const sigImg = document.getElementById('pv-sig-img');
-    if (sigImg) sigImg.style.display = signerName === 'Aarush P' ? 'block' : 'none';
+    if (sigImg) sigImg.style.display = (signerName === 'Aarush P' || signerName === 'Aarush') ? 'block' : 'none';
 
     const prefix = v('prefix') || 'CA';
     g('pv-certid').textContent  = prefix + '-XXXX-XXXX';
