@@ -21,8 +21,8 @@ def generate_pdf(cert: dict) -> bytes:
     try:
         from weasyprint import HTML
         return HTML(string=html_content, base_url=os.getcwd()).write_pdf()
-    except OSError:
-        # GTK libraries not available (common on Windows dev)
+    except (OSError, ImportError):
+        # GTK not available or WeasyPrint not installed — fall through to xhtml2pdf
         pass
     except Exception as e:
         raise RuntimeError(f"WeasyPrint failed unexpectedly: {e}") from e
