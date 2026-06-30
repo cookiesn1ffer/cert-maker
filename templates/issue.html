@@ -168,6 +168,10 @@
           <span class="cert-meta-label">Cohort</span>
           <span class="cert-meta-value" id="pv-cohort">—</span>
         </div>
+        <div class="cert-meta-item" id="pv-cohort-label-wrap">
+          <span class="cert-meta-label">Cohort Label</span>
+          <span class="cert-meta-value" id="pv-cohort-label">—</span>
+        </div>
       </div>
       <div class="cert-sig-row">
         <div class="cert-sig">
@@ -216,6 +220,10 @@
     const cohort = v('cohort_code');
     g('pv-cohort').textContent = cohort || '—';
     g('pv-cohort-wrap').style.display = cohort ? '' : 'none';
+
+    const cohortLabel = v('cohort_label');
+    g('pv-cohort-label').textContent = cohortLabel || '—';
+    g('pv-cohort-label-wrap').style.display = cohortLabel ? '' : 'none';
 
     // skills chips
     const skills = v('skills').split(',').map(s=>s.trim()).filter(Boolean);

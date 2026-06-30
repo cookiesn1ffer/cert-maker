@@ -343,12 +343,12 @@ textarea { resize: vertical; min-height: 70px; }
 }
 .cert-brand-col-logo,
 .cert-brand-col-spacer {
-  width: 64px;
+  width: 80px;
   flex-shrink: 0;
 }
 .cert-brand-col-logo { display: flex; align-items: center; }
 .cert-brand-col-center { flex: 1; text-align: center; }
-.cert-logo { width: 56px; height: 56px; object-fit: contain; display: block; }
+.cert-logo { width: 72px; height: 72px; object-fit: contain; display: block; }
 
 /* ── Certificate card (shared: live preview + PDF) ─────────────────────
    IMPORTANT: all colors explicit, no system-font fallbacks.
