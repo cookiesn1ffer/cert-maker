@@ -366,34 +366,26 @@ textarea { resize: vertical; min-height: 70px; }
   position: relative;
 }
 
-/* titlebar */
+/* titlebar — dark navy with macOS-style dots */
 .cert-titlebar {
-  background: #f6f7f9;
-  border-bottom: 1px solid #dde1e7;
-  padding: 9px 16px;
+  background: #16233a;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .cert-titlebar .tb-dots { display: flex; gap: 5px; }
-.cert-titlebar .tb-dots span {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: #dde1e7;
-  display: inline-block;
-}
-.cert-titlebar .tb-cmd {
-  font-size: .7rem;
-  color: #69707c;
-  letter-spacing: .03em;
-}
+.cert-titlebar .tb-dots span { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.cert-titlebar .tb-dots span:nth-child(1) { background: #ff5f57; }
+.cert-titlebar .tb-dots span:nth-child(2) { background: #febc2e; }
+.cert-titlebar .tb-dots span:nth-child(3) { background: #28c840; }
+.cert-titlebar .tb-cmd { font-size: .7rem; color: #7a9ab0; letter-spacing: .04em; }
 
-/* corner accents (SVG inline) */
-.cert-corner { position: absolute; pointer-events: none; }
-.cert-corner-tl { top: 38px; left: 0; }
-.cert-corner-br { bottom: 0; right: 0; }
+/* teal gradient accent bar below titlebar */
+.cert-accent-bar { height: 3px; background: linear-gradient(90deg, #0a5a5a 0%, #0d6e6e 50%, #1ab8b8 100%); }
 
 /* body */
-.cert-body { padding: 32px 40px 28px; position: relative; }
+.cert-body { padding: 28px 40px 26px; }
 
 .cert-eyebrow {
   font-size: .65rem;
@@ -411,35 +403,38 @@ textarea { resize: vertical; min-height: 70px; }
   text-transform: uppercase;
 }
 
-.cert-intro { font-size: .72rem; color: #69707c; margin-bottom: 4px; }
+/* centered content for diploma feel */
+.cert-intro     { font-size: .72rem; color: #69707c; margin-bottom: 4px; text-align: center; }
+.cert-completed { font-size: .72rem; color: #69707c; margin-bottom: 4px; text-align: center; }
 
 .cert-name {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: #16233a;
   line-height: 1.15;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-.cert-completed { font-size: .72rem; color: #69707c; margin-bottom: 4px; }
 .cert-course {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   font-size: 1.1rem;
   color: #27405f;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  text-align: center;
 }
 
 /* skills */
-.cert-skills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 24px; }
+.cert-skills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; justify-content: center; }
 .cert-skill-tag {
-  background: #f6f7f9;
-  border: 1px solid #dde1e7;
+  background: #f0fafa;
+  border: 1px solid #b8d8d8;
   border-radius: 5px;
   padding: 4px 10px;
   font-size: .65rem;
-  color: #27405f;
+  color: #0d6e6e;
   letter-spacing: .04em;
 }
 
@@ -450,37 +445,19 @@ textarea { resize: vertical; min-height: 70px; }
   padding: 12px 16px;
   display: flex;
   gap: 28px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .cert-meta-item { display: flex; flex-direction: column; gap: 2px; }
 .cert-meta-label { font-size: .6rem; color: #69707c; letter-spacing: .1em; text-transform: uppercase; }
 .cert-meta-value { font-size: .78rem; color: #16233a; font-weight: 600; }
 
-/* signature row */
-.cert-sig-row { display: flex; justify-content: space-between; align-items: flex-end; }
+/* signature */
+.cert-sig-row { display: flex; align-items: flex-end; }
 .cert-sig { display: flex; flex-direction: column; gap: 2px; }
-.cert-sig-line { width: 140px; height: 1px; background: #dde1e7; margin-bottom: 6px; }
+.cert-sig-img { height: 80px; width: auto; display: block; margin-bottom: -10px; }
+.cert-sig-line { width: 160px; height: 1.5px; background: #0d6e6e; opacity: .5; margin-bottom: 6px; }
 .cert-sig-name { font-size: .78rem; color: #16233a; font-weight: 600; }
-.cert-sig-role { font-size: .65rem; color: #69707c; }
-
-.cert-ok-badge {
-  border: 1.5px solid #0d6e6e;
-  border-radius: 7px;
-  padding: 8px 14px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #0d6e6e;
-  font-size: .68rem;
-  font-weight: 600;
-  letter-spacing: .06em;
-}
-.cert-ok-badge .ok-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #0d6e6e;
-  flex-shrink: 0;
-}
+.cert-sig-role { font-size: .65rem; color: #0d6e6e; letter-spacing: .03em; }
 
 /* ── Print / PDF overrides ─────────────────────────────────────────────── */
 @media print {

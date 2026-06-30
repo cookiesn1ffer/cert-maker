@@ -1,6 +1,6 @@
 {% set skills_list = cert.skills.split(',') if cert.skills else [] %}
 <div class="cert-card">
-  <!-- Titlebar -->
+
   <div class="cert-titlebar">
     <div class="tb-dots">
       <span></span><span></span><span></span>
@@ -8,21 +8,10 @@
     <span class="tb-cmd">cookie@academy:~$ ./certs/issue.sh</span>
   </div>
 
-  <!-- Top-left corner accent (navy) -->
-  <svg class="cert-corner cert-corner-tl" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 10 L10 10 L10 0" stroke="#16233a" stroke-width="1.5" fill="none"/>
-    <path d="M0 24 L24 24 L24 0" stroke="#16233a" stroke-width="1" fill="none" opacity=".25"/>
-    <circle cx="10" cy="10" r="2.5" fill="#16233a"/>
-  </svg>
-
-  <!-- Bottom-right corner accent (teal) -->
-  <svg class="cert-corner cert-corner-br" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M54 44 L44 44 L44 54" stroke="#0d6e6e" stroke-width="1.5" fill="none"/>
-    <path d="M54 30 L30 30 L30 54" stroke="#0d6e6e" stroke-width="1" fill="none" opacity=".25"/>
-    <circle cx="44" cy="44" r="2.5" fill="#0d6e6e"/>
-  </svg>
+  <div class="cert-accent-bar"></div>
 
   <div class="cert-body">
+
     <div class="cert-brand-header">
       <div class="cert-brand-col-logo">
         <img src="{{ url_for('static', filename='img/logo.png') }}" class="cert-logo" alt="Cookie's Academy">
@@ -34,9 +23,10 @@
       <div class="cert-brand-col-spacer"></div>
     </div>
 
+    <div style="height:1px; background:#eef0f4; margin-bottom:20px;"></div>
+
     <div class="cert-intro">This certifies that</div>
     <div class="cert-name">{{ cert.student_name }}</div>
-
     <div class="cert-completed">has successfully completed</div>
     <div class="cert-course">{{ cert.course_title }}</div>
 
@@ -75,16 +65,13 @@
     <div class="cert-sig-row">
       <div class="cert-sig">
         {% if cert.signer_name in ('Aarush P', 'Aarush') %}
-        <img src="{{ url_for('static', filename='img/sig_aarush.png') }}" style="height:52px;width:auto;display:block;margin-bottom:-6px;" alt="">
+        <img src="{{ url_for('static', filename='img/sig_aarush.png') }}" class="cert-sig-img" alt="">
         {% endif %}
         <div class="cert-sig-line"></div>
         <div class="cert-sig-name">{{ cert.signer_name or '—' }}</div>
         <div class="cert-sig-role">{{ cert.signer_role or '' }}</div>
       </div>
-      <div class="cert-ok-badge">
-        <span class="ok-dot"></span>
-        [OK] RECORD ON FILE
-      </div>
     </div>
+
   </div>
 </div>

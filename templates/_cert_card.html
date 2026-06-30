@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    @page { size: 800px 520px; margin: 0; }
+    @page { size: 800px 530px; margin: 0; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { width: 800px; background: #ffffff; font-family: 'JetBrains Mono', 'Courier New', monospace; }
@@ -20,61 +20,48 @@
     }
 
     /* ── Titlebar ── */
-    .cert-titlebar {
-      background: #f6f7f9;
-      border-bottom: 1px solid #dde1e7;
-      padding: 9px 16px;
-    }
-    .tb-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%; background: #dde1e7;
-      display: inline-block; margin-right: 5px;
-    }
-    .tb-cmd { font-size: .7rem; color: #69707c; letter-spacing: .03em; margin-left: 8px; }
+    .cert-titlebar { background: #16233a; padding: 10px 16px; }
+    .tb-dot-r { width:10px; height:10px; border-radius:50%; background:#ff5f57; display:inline-block; margin-right:4px; }
+    .tb-dot-y { width:10px; height:10px; border-radius:50%; background:#febc2e; display:inline-block; margin-right:4px; }
+    .tb-dot-g { width:10px; height:10px; border-radius:50%; background:#28c840; display:inline-block; margin-right:8px; }
+    .tb-cmd   { font-size:.7rem; color:#7a9ab0; letter-spacing:.04em; }
+
+    /* ── Teal accent bar ── */
+    .cert-accent-bar { height: 3px; background: #0d6e6e; }
 
     /* ── Body ── */
-    .cert-body { padding: 26px 40px 22px; }
+    .cert-body { padding: 24px 40px 22px; }
 
-    .cert-eyebrow { font-size: .65rem; letter-spacing: .18em; color: #0d6e6e; text-transform: uppercase; margin-bottom: 2px; font-family: 'JetBrains Mono', 'Courier New', monospace; }
-    .cert-brand   { font-family: 'Space Grotesk', Arial, sans-serif; font-weight: 700; font-size: 1rem; color: #16233a; letter-spacing: .08em; text-transform: uppercase; }
+    .cert-eyebrow { font-size:.65rem; letter-spacing:.18em; color:#0d6e6e; text-transform:uppercase; margin-bottom:2px; }
+    .cert-brand   { font-family:'Space Grotesk',Arial,sans-serif; font-weight:700; font-size:1rem; color:#16233a; letter-spacing:.08em; text-transform:uppercase; }
 
-    .cert-intro     { font-size: .72rem; color: #69707c; margin-bottom: 4px; }
-    .cert-name      { font-family: 'Space Grotesk', Arial, sans-serif; font-weight: 700; font-size: 2rem; color: #16233a; line-height: 1.15; margin-bottom: 10px; }
-    .cert-completed { font-size: .72rem; color: #69707c; margin-bottom: 4px; }
-    .cert-course    { font-family: 'Space Grotesk', Arial, sans-serif; font-weight: 700; font-size: 1.1rem; color: #27405f; margin-bottom: 14px; }
+    .cert-divider { height:1px; background:#eef0f4; margin-bottom:18px; }
+
+    .cert-intro     { font-size:.72rem; color:#69707c; margin-bottom:4px; text-align:center; }
+    .cert-completed { font-size:.72rem; color:#69707c; margin-bottom:4px; text-align:center; }
+    .cert-name      { font-family:'Space Grotesk',Arial,sans-serif; font-weight:700; font-size:2.2rem; color:#16233a; line-height:1.15; margin-bottom:10px; text-align:center; }
+    .cert-course    { font-family:'Space Grotesk',Arial,sans-serif; font-weight:700; font-size:1.1rem; color:#27405f; margin-bottom:16px; text-align:center; }
 
     .cert-skill-tag {
-      display: inline-block;
-      background: #f6f7f9;
-      border: 1px solid #dde1e7;
-      border-radius: 5px;
-      padding: 3px 10px;
-      font-size: .65rem;
-      color: #27405f;
-      letter-spacing: .04em;
-      margin-right: 6px;
-      margin-bottom: 4px;
+      display:inline-block;
+      background:#f0fafa;
+      border:1px solid #b8d8d8;
+      border-radius:5px;
+      padding:3px 10px;
+      font-size:.65rem;
+      color:#0d6e6e;
+      letter-spacing:.04em;
+      margin-right:6px;
+      margin-bottom:4px;
     }
 
-    .cert-meta-label { font-size: .6rem; color: #69707c; letter-spacing: .1em; text-transform: uppercase; display: block; }
-    .cert-meta-value { font-size: .78rem; color: #16233a; font-weight: 600; display: block; }
+    .cert-meta-label { font-size:.6rem; color:#69707c; letter-spacing:.1em; text-transform:uppercase; display:block; }
+    .cert-meta-value { font-size:.78rem; color:#16233a; font-weight:600; display:block; }
 
-    .cert-sig-img  { height: 50px; width: auto; display: block; margin-bottom: -6px; }
-    .cert-sig-line { width: 140px; height: 1px; background: #dde1e7; margin-bottom: 5px; }
-    .cert-sig-name { font-size: .78rem; color: #16233a; font-weight: 600; }
-    .cert-sig-role { font-size: .65rem; color: #69707c; }
-
-    .cert-ok-badge {
-      display: inline-block;
-      border: 1.5px solid #0d6e6e;
-      border-radius: 7px;
-      padding: 7px 13px;
-      color: #0d6e6e;
-      font-size: .66rem;
-      font-weight: 600;
-      letter-spacing: .06em;
-      white-space: nowrap;
-    }
+    .cert-sig-img  { height:80px; width:auto; display:block; margin-bottom:-10px; }
+    .cert-sig-line { width:160px; height:1.5px; background:#0d6e6e; opacity:.5; margin-bottom:6px; display:block; }
+    .cert-sig-name { font-size:.78rem; color:#16233a; font-weight:600; }
+    .cert-sig-role { font-size:.65rem; color:#0d6e6e; letter-spacing:.03em; }
   </style>
 </head>
 <body>
@@ -82,14 +69,17 @@
 
   <!-- Titlebar -->
   <div class="cert-titlebar">
-    <span class="tb-dot"></span><span class="tb-dot"></span><span class="tb-dot"></span>
+    <span class="tb-dot-r"></span><span class="tb-dot-y"></span><span class="tb-dot-g"></span>
     <span class="tb-cmd">cookie@academy:~$ ./certs/issue.sh</span>
   </div>
+
+  <!-- Teal accent bar -->
+  <div class="cert-accent-bar"></div>
 
   <div class="cert-body">
 
     <!-- Brand header -->
-    <table style="width:100%; border-collapse:collapse; border-spacing:0; margin-bottom:18px;">
+    <table style="width:100%; border-collapse:collapse; border-spacing:0; margin-bottom:16px;">
       <tr>
         <td style="width:64px; vertical-align:middle; padding:0;">
           {% if logo_src %}
@@ -104,14 +94,15 @@
       </tr>
     </table>
 
+    <div class="cert-divider"></div>
+
     <div class="cert-intro">This certifies that</div>
     <div class="cert-name">{{ cert.student_name }}</div>
-
     <div class="cert-completed">has successfully completed</div>
     <div class="cert-course">{{ cert.course_title }}</div>
 
     {% if cert.skills %}
-    <div style="margin-bottom:14px;">
+    <div style="text-align:center; margin-bottom:14px;">
       {% for skill in cert.skills.split(',') %}
         {% set s = skill.strip() %}
         {% if s %}<span class="cert-skill-tag">{{ s }}</span>{% endif %}
@@ -120,7 +111,7 @@
     {% endif %}
 
     <!-- Meta box -->
-    <div style="border:1.5px dashed #dde1e7; border-radius:8px; padding:10px 14px; margin-bottom:18px; display:block;">
+    <div style="border:1.5px dashed #dde1e7; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:block;">
       <table style="border-collapse:collapse; border-spacing:0;">
         <tr>
           <td style="padding-right:28px; vertical-align:top;">
@@ -147,22 +138,15 @@
       </table>
     </div>
 
-    <!-- Signature row -->
-    <table style="width:100%; border-collapse:collapse; border-spacing:0;">
-      <tr>
-        <td style="vertical-align:bottom; width:55%;">
-          {% if cert.signer_name in ('Aarush P', 'Aarush') and sig_src %}
-          <img src="{{ sig_src }}" class="cert-sig-img" alt="">
-          {% endif %}
-          <div class="cert-sig-line"></div>
-          <div class="cert-sig-name">{{ cert.signer_name or '—' }}</div>
-          <div class="cert-sig-role">{{ cert.signer_role or '' }}</div>
-        </td>
-        <td style="text-align:right; vertical-align:bottom; width:45%;">
-          <span class="cert-ok-badge">&#9679; [OK] RECORD ON FILE</span>
-        </td>
-      </tr>
-    </table>
+    <!-- Signature -->
+    <div>
+      {% if cert.signer_name in ('Aarush P', 'Aarush') and sig_src %}
+      <img src="{{ sig_src }}" class="cert-sig-img" alt="">
+      {% endif %}
+      <div class="cert-sig-line"></div>
+      <div class="cert-sig-name">{{ cert.signer_name or '—' }}</div>
+      <div class="cert-sig-role">{{ cert.signer_role or '' }}</div>
+    </div>
 
   </div>
 </div>
