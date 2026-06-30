@@ -4,8 +4,14 @@ import io
 import os
 import sys
 
-# Project root is two levels up from netlify/functions/
-_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# In Lambda, all included_files land at /var/task/ alongside this file.
+# Locally, this file is at .../netlify/functions/api.py, so project root is ../../
+_here = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists(os.path.join(_here, "app.py")):
+    _root = _here                                             # Lambda / Netlify
+else:
+    _root = os.path.abspath(os.path.join(_here, "..", "..")) # local dev
+
 sys.path.insert(0, _root)
 os.chdir(_root)  # Flask resolves templates/ and static/ relative to cwd
 
@@ -16,10 +22,10 @@ _BINARY_TYPES = {"application/pdf", "image/png", "image/jpeg", "image/gif", "ima
 
 
 def handler(event, context):
-    method  = event.get("httpMethod", "GET")
-    path    = event.get("path", "/")
-    qs      = event.get("queryStringParameters") or {}
-    headers = {k.lower(): v for k, v in (event.get("headers") or {}).items()}
+    method   = event.get("httpMethod", "GET")
+    path     = event.get("path", "/")
+    qs       = event.get("queryStringParameters") or {}
+    headers  = {k.lower(): v for k, v in (event.get("headers") or {}).items()}
     raw_body = event.get("body") or ""
 
     if event.get("isBase64Encoded") and raw_body:

@@ -1,25 +1,10 @@
 [build]
   functions = "netlify/functions"
-  # No publish dir — all requests (including /static/) are handled by Flask
 
 [build.environment]
   PYTHON_VERSION = "3.11"
 
-[functions]
-  # Increase timeout to 26s (max on free plan) to cover PDF generation
-  [functions.api]
-    included_files = [
-      "app.py",
-      "auth.py",
-      "models.py",
-      "pdf_gen.py",
-      "templates/**",
-      "static/**",
-    ]
-
-# Route every request to the Flask function.
-# Netlify checks for a matching real file first (force = false),
-# so /static/* served straight from CDN if you ever add a publish dir.
+# Route every request through the Flask function.
 [[redirects]]
   from   = "/*"
   to     = "/.netlify/functions/api"
