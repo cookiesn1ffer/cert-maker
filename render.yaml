@@ -9,9 +9,7 @@ services:
         generateValue: true
       - key: FLASK_ENV
         value: production
-      - key: DB_PATH
-        value: /data/certs.db
-    disk:
-      name: cert-data
-      mountPath: /data
-      sizeGB: 1
+      # Set this in the Render dashboard to your Neon connection string.
+      # Example: postgresql://user:password@host.neon.tech/dbname?sslmode=require
+      - key: DATABASE_URL
+        sync: false
