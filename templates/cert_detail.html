@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Certificate {{ cert.cert_id }}{% endblock %}
+{% block page_title %}Certificate Detail{% endblock %}
+{% block page_subtitle %}<p>Full record for {{ cert.student_name }}.</p>{% endblock %}
+
+{% block content %}
+<div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+
+  <!-- Details panel -->
+  <div style="flex:1; min-width:260px;">
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-body">
+        <table style="font-size:.82rem; border-collapse:collapse; width:100%;">
+          <tr>
+            <td style="padding:8px 0; color:var(--text-dim); width:130px; vertical-align:top;">Cert ID</td>
+            <td style="padding:8px 0; font-weight:600; font-family:'JetBrains Mono',monospace; color:var(--teal);">
+              {{ cert.cert_id }}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0; color:var(--text-dim); border-top:1px solid var(--line);">Student</td>
+            <td style="padding:8px 0; border-top:1px solid var(--line);">{{ cert.student_name }}</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0; color:var(--text-dim); border-top:1px solid var(--line);">Course</td>
+            <td style="padding:8px 0; border-top:1px solid var(--line);">{{ cert.course_title }}</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0; color:var(--text-dim); border-top:1px solid var(--line);">Issue Date</td>
+            <td style="padding:8px 0; border-top:1px solid var(--line);">{{ cert.issue_date }}</td>
+          </tr>
+          {% if cert.cohort_label %}
+          <tr>
+            <td style="padding:8px 0; color:var(--text-dim); border-top:1px solid var(--line);">Cohort</td>
+            <td style="padding:8px 0; border-top:1px solid var(--line);">
+              {{ cert.cohort_label }}{% if cert.cohort_code %} ({{ cert.cohort_code }}){% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if cert.skills %}
+          <tr>
+            <td style="padding:8px 0; color:var(--text-dim); border-top:1px solid var(--line); vertical-align:top;">Skills</td>
+            <td style="padding:8px 0; border-top:1px solid var(--line);">
+              <div class="cert-skills" style="margin:0;">
+                {% for skill in cert.skills.split(',') %}
+                  {% set s = skill.strip() %}
+                  {% if s %}<span class="cert-skill-tag">{{ s }}</span>{% endif %}
+                {% endfor %}
+              </div>
+            </td>
+          </tr>
+          {% endif %}
+          {% if cert.signer_name %}
+          <tr>
+            <td style="padding:8px 0; color:var(--text-dim); border-top:1px solid var(--line);">Signed By</td>
+            <td style="padding:8px 0; border-top:1px solid var(--line);">
+              {{ cert.signer_name }}{% if cert.signer_role %}, {{ cert.signer_role }}{% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          <tr>
+            <td style="padding:8px 0; color:var(--text-dim); border-top:1px solid var(--line);">Issued At</td>
+            <td style="padding:8px 0; border-top:1px solid var(--line); font-size:.75rem; color:var(--text-dim);">
+              {{ cert.created_at }}
+            </td>
+          </tr>
+        </table>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
+          <a href="{{ url_for('download_cert', cert_id=cert.cert_id) }}" class="btn btn-teal">
+            ↓ Download PDF
+          </a>
+          <a href="{{ url_for('verify_cert', cert_id=cert.cert_id) }}" class="btn btn-outline" target="_blank">
+            Public View ↗
+          </a>
+          <a href="{{ url_for('certs_list') }}" class="btn btn-outline">
+            ← All Certs
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <div class="card" style="border-color:#f5c6c6;">
+      <div class="card-body">
+        <div style="font-size:.75rem; font-weight:600; color:#8b1a1a; letter-spacing:.06em; margin-bottom:12px;">
+          DANGER ZONE
+        </div>
+        <p style="font-size:.78rem; color:var(--text-dim); margin-bottom:14px;">
+          Permanently delete this certificate record. This cannot be undone.
+        </p>
+        <form method="post" action="{{ url_for('delete_cert', cert_id=cert.cert_id) }}"
+              onsubmit="return confirm('Delete {{ cert.cert_id }} permanently? This cannot be undone.')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-danger btn-sm">Delete Certificate</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certificate preview -->
+  <div style="flex:2; min-width:300px; overflow-x:auto;">
+    <div class="preview-label">Certificate Preview</div>
+    {% include "_cert_card_snippet.html" %}
+  </div>
+
+</div>
+{% endblock %}

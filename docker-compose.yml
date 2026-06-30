@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  certs:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      FLASK_ENV: production

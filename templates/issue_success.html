@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Certificate Issued{% endblock %}
+{% block page_title %}Certificate Issued{% endblock %}
+{% block page_subtitle %}<p>The certificate has been saved to the database.</p>{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 680px;">
+  <div class="card-body">
+    <p style="font-size:.8rem; color:var(--text-dim); margin-bottom:6px;">
+      {% if created %}
+      <span class="badge-new">NEW</span>
+      {% else %}
+      <span class="badge-exist">EXISTING RECORD</span>
+      {% endif %}
+    </p>
+    <p style="font-size:.8rem; color:var(--text-dim);">Cert ID</p>
+    <div class="success-cert-id">{{ cert.cert_id }}</div>
+
+    <table style="font-size:.8rem; border-collapse:collapse; width:100%; margin-bottom:4px;">
+      <tr>
+        <td style="padding:5px 0; color:var(--text-dim); width:140px;">Student</td>
+        <td style="padding:5px 0;">{{ cert.student_name }}</td>
+      </tr>
+      <tr>
+        <td style="padding:5px 0; color:var(--text-dim);">Course</td>
+        <td style="padding:5px 0;">{{ cert.course_title }}</td>
+      </tr>
+      <tr>
+        <td style="padding:5px 0; color:var(--text-dim);">Issue Date</td>
+        <td style="padding:5px 0;">{{ cert.issue_date }}</td>
+      </tr>
+      {% if cert.cohort_label %}
+      <tr>
+        <td style="padding:5px 0; color:var(--text-dim);">Cohort</td>
+        <td style="padding:5px 0;">{{ cert.cohort_label }}{% if cert.cohort_code %} ({{ cert.cohort_code }}){% endif %}</td>
+      </tr>
+      {% endif %}
+    </table>
+
+    <div class="success-actions">
+      <a href="{{ url_for('download_cert', cert_id=cert.cert_id) }}" class="btn btn-teal">
+        ↓ Download PDF
+      </a>
+      <a href="{{ url_for('issue') }}" class="btn btn-outline">Issue Another</a>
+      <a href="{{ url_for('certs_list') }}" class="btn btn-outline">All Certificates</a>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 28px;">
+  <div class="preview-label">Certificate Preview</div>
+  {% include "_cert_card_snippet.html" %}
+</div>
+{% endblock %}

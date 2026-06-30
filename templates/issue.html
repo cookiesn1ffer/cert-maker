@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% block title %}Issue Certificate{% endblock %}
+{% block page_title %}Issue Certificate{% endblock %}
+{% block page_subtitle %}<p>Fill the form; click Preview to see the cert card, then Submit to save.</p>{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* scale preview to fit without scrolling */
+  .preview-scaler { transform-origin: top left; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="issue-layout">
+
+  <!-- ── Form ── -->
+  <div>
+    {% if errors %}
+    <ul class="flash-list" style="margin-bottom:16px;">
+      {% for e in errors %}<li class="error">{{ e }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-body">
+        <form method="post" action="{{ url_for('issue') }}" id="issue-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="action" id="form-action" value="preview">
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="student_name">Student Name *</label>
+              <input type="text" id="student_name" name="student_name"
+                     value="{{ form_data.student_name }}" required
+                     oninput="syncPreview()">
+            </div>
+            <div class="form-group">
+              <label for="issue_date">Issue Date *</label>
+              <input type="date" id="issue_date" name="issue_date"
+                     value="{{ form_data.issue_date }}" required
+                     oninput="syncPreview()">
+            </div>
+            <div class="form-group full">
+              <label for="course_title">Course Title *</label>
+              <input type="text" id="course_title" name="course_title"
+                     value="{{ form_data.course_title }}" required
+                     oninput="syncPreview()">
+            </div>
+            <div class="form-group">
+              <label for="cohort_label">Cohort Label</label>
+              <input type="text" id="cohort_label" name="cohort_label"
+                     value="{{ form_data.cohort_label }}" placeholder="e.g. Cohort 01 — Live"
+                     oninput="syncPreview()">
+            </div>
+            <div class="form-group">
+              <label for="cohort_code">Cohort Code</label>
+              <input type="text" id="cohort_code" name="cohort_code"
+                     value="{{ form_data.cohort_code }}" placeholder="e.g. CA-01"
+                     oninput="syncPreview()">
+            </div>
+            <div class="form-group full">
+              <label for="skills">Skills (comma-separated)</label>
+              <input type="text" id="skills" name="skills"
+                     value="{{ form_data.skills }}" placeholder="Python, Flask, SQLite"
+                     oninput="syncPreview()">
+            </div>
+            <div class="form-group">
+              <label for="signer_name">Signer Name</label>
+              <input type="text" id="signer_name" name="signer_name"
+                     value="{{ form_data.signer_name }}"
+                     oninput="syncPreview()">
+            </div>
+            <div class="form-group">
+              <label for="signer_role">Signer Role</label>
+              <input type="text" id="signer_role" name="signer_role"
+                     value="{{ form_data.signer_role }}"
+                     oninput="syncPreview()">
+            </div>
+            <div class="form-group">
+              <label for="prefix">Cert ID Prefix</label>
+              <input type="text" id="prefix" name="prefix"
+                     value="{{ form_data.prefix }}" style="max-width:100px;"
+                     oninput="syncPreview()">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="doPreview()">Preview</button>
+            <button type="submit" class="btn btn-primary" onclick="doSubmit()">Issue Certificate</button>
+            <label class="checkbox-row">
+              <input type="checkbox" name="force_new" value="1"> Force new cert ID
+            </label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Live preview ── -->
+  <div class="issue-preview-wrap">
+    <div class="preview-label">Live Preview</div>
+    <div id="preview-container" style="overflow:hidden; border-radius:12px;">
+      {% if preview_cert %}
+        {% include "_cert_preview_inline.html" ignore missing %}
+        <div id="cert-preview-html">
+          {% set cert = preview_cert %}
+          {% include "_cert_card_inline.html" ignore missing %}
+        </div>
+      {% endif %}
+      <div id="cert-preview-live">
+        {% if not preview_cert %}
+        <div style="
+          background: var(--panel);
+          border: 2px dashed var(--line);
+          border-radius: 12px;
+          padding: 48px 32px;
+          text-align: center;
+          color: var(--text-dim);
+          font-size: .8rem;
+        ">
+          Fill the form and click <strong>Preview</strong><br>to see the certificate here.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Inline cert card for live preview (JS-driven) -->
+<template id="cert-template">
+  <div class="cert-card" style="width:100%; font-size:.8rem;">
+    <div class="cert-titlebar">
+      <div class="tb-dots"><span></span><span></span><span></span></div>
+      <span class="tb-cmd">cookie@academy:~$ ./certs/issue.sh</span>
+    </div>
+    <div style="position:relative;">
+      <svg style="position:absolute;top:0;left:0;pointer-events:none;" width="54" height="54" viewBox="0 0 54 54" fill="none">
+        <path d="M0 10 L10 10 L10 0" stroke="#16233a" stroke-width="1.5" fill="none"/>
+        <path d="M0 24 L24 24 L24 0" stroke="#16233a" stroke-width="1" fill="none" opacity=".25"/>
+        <circle cx="10" cy="10" r="2.5" fill="#16233a"/>
+      </svg>
+      <svg style="position:absolute;bottom:0;right:0;pointer-events:none;" width="54" height="54" viewBox="0 0 54 54" fill="none">
+        <path d="M54 44 L44 44 L44 54" stroke="#0d6e6e" stroke-width="1.5" fill="none"/>
+        <path d="M54 30 L30 30 L30 54" stroke="#0d6e6e" stroke-width="1" fill="none" opacity=".25"/>
+        <circle cx="44" cy="44" r="2.5" fill="#0d6e6e"/>
+      </svg>
+      <div class="cert-body">
+        <div class="cert-brand-header">
+          <div class="cert-brand-col-logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" class="cert-logo" alt="Cookie's Academy">
+          </div>
+          <div class="cert-brand-col-center">
+            <div class="cert-eyebrow">Certificate of Completion</div>
+            <div class="cert-brand">Cookie's Academy</div>
+          </div>
+          <div class="cert-brand-col-spacer"></div>
+        </div>
+        <div class="cert-intro">This certifies that</div>
+        <div class="cert-name" id="pv-name">—</div>
+        <div class="cert-completed">has successfully completed</div>
+        <div class="cert-course" id="pv-course">—</div>
+        <div class="cert-skills" id="pv-skills"></div>
+        <div class="cert-meta">
+          <div class="cert-meta-item">
+            <span class="cert-meta-label">Issued</span>
+            <span class="cert-meta-value" id="pv-date">—</span>
+          </div>
+          <div class="cert-meta-item">
+            <span class="cert-meta-label">Cert ID</span>
+            <span class="cert-meta-value" id="pv-certid">PREVIEW</span>
+          </div>
+          <div class="cert-meta-item" id="pv-cohort-wrap">
+            <span class="cert-meta-label">Cohort</span>
+            <span class="cert-meta-value" id="pv-cohort">—</span>
+          </div>
+        </div>
+        <div class="cert-sig-row">
+          <div class="cert-sig">
+            <div class="cert-sig-line"></div>
+            <div class="cert-sig-name" id="pv-signer">—</div>
+            <div class="cert-sig-role" id="pv-role"></div>
+          </div>
+          <div class="cert-ok-badge">
+            <span class="ok-dot"></span>[OK] RECORD ON FILE
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  let previewMounted = false;
+
+  function mountPreview() {
+    if (previewMounted) return;
+    const tmpl = document.getElementById('cert-template');
+    const node = tmpl.content.cloneNode(true);
+    document.getElementById('cert-preview-live').innerHTML = '';
+    document.getElementById('cert-preview-live').appendChild(node);
+    previewMounted = true;
+  }
+
+  function syncPreview() {
+    mountPreview();
+    const g = id => document.getElementById(id);
+    const v = id => (document.getElementById(id)||{}).value || '';
+
+    g('pv-name').textContent    = v('student_name') || '—';
+    g('pv-course').textContent  = v('course_title') || '—';
+    g('pv-date').textContent    = v('issue_date') || '—';
+    g('pv-signer').textContent  = v('signer_name') || '—';
+    g('pv-role').textContent    = v('signer_role') || '';
+
+    const prefix = v('prefix') || 'CA';
+    g('pv-certid').textContent  = prefix + '-XXXX-XXXX';
+
+    const cohort = v('cohort_code');
+    g('pv-cohort').textContent = cohort || '—';
+    g('pv-cohort-wrap').style.display = cohort ? '' : 'none';
+
+    // skills chips
+    const skills = v('skills').split(',').map(s=>s.trim()).filter(Boolean);
+    const el = g('pv-skills');
+    el.innerHTML = skills.map(s => `<span class="cert-skill-tag">${s}</span>`).join('');
+    el.style.display = skills.length ? 'flex' : 'none';
+  }
+
+  function doPreview() {
+    document.getElementById('form-action').value = 'preview';
+  }
+  function doSubmit() {
+    document.getElementById('form-action').value = 'submit';
+  }
+
+  // On page load, if there are form values (POST-back), sync immediately
+  document.addEventListener('DOMContentLoaded', () => {
+    const hasData = document.getElementById('student_name').value ||
+                    document.getElementById('course_title').value;
+    if (hasData) syncPreview();
+  });
+</script>
+{% endblock %}

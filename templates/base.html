@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Cookie's Academy{% endblock %} — Cert Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-title">Cookie's Academy</div>
+      <div class="brand-sub">// cert manager</div>
+    </div>
+    <nav>
+      <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+        › Dashboard
+      </a>
+      <a href="{{ url_for('issue') }}" class="{% if request.endpoint in ('issue', 'issue_success') %}active{% endif %}">
+        › Issue Certificate
+      </a>
+      <a href="{{ url_for('certs_list') }}" class="{% if request.endpoint == 'certs_list' %}active{% endif %}">
+        › All Certificates
+      </a>
+      <a href="{{ url_for('export_csv') }}">
+        › Export CSV
+      </a>
+      <div style="margin:10px 20px; height:1px; background:rgba(255,255,255,.08);"></div>
+      <a href="{{ url_for('verify') }}" target="_blank">
+        › Verify Portal ↗
+      </a>
+      <a href="{{ url_for('admin_settings') }}" class="{% if request.endpoint == 'admin_settings' %}active{% endif %}">
+        › Settings
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div style="font-size:.7rem; color:#5c7a99; margin-bottom:8px; letter-spacing:.03em;">
+        Logged in as <strong style="color:#8fa8c8;">{{ session.get('username', 'admin') }}</strong>
+      </div>
+      <form action="{{ url_for('logout') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn-logout" type="submit">⏻ Logout</button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <h1>{% block page_title %}{% endblock %}</h1>
+      {% block page_subtitle %}<p></p>{% endblock %}
+    </div>
+    <div class="page-body">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flash-list">
+          {% for cat, msg in messages %}
+          <li class="{{ cat }}">{{ msg }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

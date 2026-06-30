@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}<p>Overview of issued certificates.</p>{% endblock %}
+
+{% block content %}
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="stat-num">{{ total }}</div>
+    <div class="stat-label">CERTIFICATES ISSUED</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">
+      {% if recent %}{{ recent[0].issue_date }}{% else %}—{% endif %}
+    </div>
+    <div class="stat-label">LAST ISSUED DATE</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h2 style="font-size:.9rem; color:var(--navy); font-family:'Space Grotesk',sans-serif; font-weight:700;">
+        Recently Issued
+      </h2>
+      <a href="{{ url_for('issue') }}" class="btn btn-teal btn-sm">+ Issue Certificate</a>
+    </div>
+
+    {% if recent %}
+    <table class="certs-table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Course</th>
+          <th>Issued</th>
+          <th>Cert ID</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in recent %}
+        <tr>
+          <td>{{ c.student_name }}</td>
+          <td>{{ c.course_title }}</td>
+          <td>{{ c.issue_date }}</td>
+          <td class="cert-id-mono">{{ c.cert_id }}</td>
+          <td>
+            <a href="{{ url_for('download_cert', cert_id=c.cert_id) }}" class="btn btn-outline btn-sm">PDF</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="color:var(--text-dim); font-size:.82rem;">No certificates issued yet. <a href="{{ url_for('issue') }}">Issue one now →</a></p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

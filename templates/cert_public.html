@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    {% if cert %}{{ cert.student_name }} — {{ cert.course_title }}{% else %}Certificate Not Found{% endif %}
+    — Cookie's Academy
+  </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .pub-page {
+      min-height: 100vh;
+      background: var(--panel);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .pub-topbar {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+    .pub-topbar .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--navy);
+    }
+    .pub-topbar .sub {
+      font-size: .7rem;
+      color: var(--teal);
+      margin-top: 1px;
+      letter-spacing: .05em;
+    }
+    .cert-wrap {
+      width: 100%;
+      max-width: 800px;
+      overflow-x: auto;
+    }
+    .pub-actions {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .not-found-box {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 48px 40px;
+      text-align: center;
+      max-width: 480px;
+    }
+    .not-found-box h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .not-found-box p { font-size: .82rem; color: var(--text-dim); }
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e5f5f2;
+      border: 1px solid #b3dfd6;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: .72rem;
+      color: #0a4a3a;
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+  </style>
+</head>
+<body>
+<div class="pub-page">
+  <div class="pub-topbar">
+    <div>
+      <div class="brand">Cookie's Academy</div>
+      <div class="sub">// certificate verification</div>
+    </div>
+    {% if cert %}
+    <span class="verified-badge">
+      <span style="width:8px;height:8px;border-radius:50%;background:#0d6e6e;display:inline-block;"></span>
+      VERIFIED RECORD
+    </span>
+    {% endif %}
+  </div>
+
+  {% if cert %}
+  <div class="cert-wrap">
+    {% include "_cert_card_snippet.html" %}
+  </div>
+  <div class="pub-actions">
+    <a href="{{ url_for('download_cert', cert_id=cert.cert_id) }}" class="btn btn-teal">
+      ↓ Download PDF
+    </a>
+    <a href="{{ url_for('verify') }}" class="btn btn-outline">
+      ← Verify Another
+    </a>
+  </div>
+  {% else %}
+  <div class="not-found-box">
+    <h2>Certificate Not Found</h2>
+    <p>No record found for ID <strong>{{ cert_id }}</strong>.</p>
+    <div style="margin-top:20px;">
+      <a href="{{ url_for('verify') }}" class="btn btn-teal">Try Again</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+</body>
+</html>

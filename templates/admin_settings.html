@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block page_title %}Admin Settings{% endblock %}
+{% block page_subtitle %}<p>Manage your admin credentials.</p>{% endblock %}
+
+{% block content %}
+
+{% if error %}
+<ul class="flash-list" style="margin-bottom:20px;">
+  <li class="error">{{ error }}</li>
+</ul>
+{% endif %}
+{% if success %}
+<ul class="flash-list" style="margin-bottom:20px;">
+  <li class="success">{{ success }}</li>
+</ul>
+{% endif %}
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; max-width:760px;">
+
+  <!-- Change Password -->
+  <div class="card">
+    <div class="card-body">
+      <h2 style="font-size:.85rem; color:var(--navy); font-family:'Space Grotesk',sans-serif;
+                 font-weight:700; margin-bottom:18px; letter-spacing:.04em;">CHANGE PASSWORD</h2>
+      <form method="post" action="{{ url_for('admin_settings') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="action" value="change_password">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="current_password">Current Password</label>
+          <input type="password" id="current_password" name="current_password"
+                 autocomplete="current-password" required>
+        </div>
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="new_password">New Password</label>
+          <input type="password" id="new_password" name="new_password"
+                 autocomplete="new-password" required minlength="8">
+          <span class="field-error" style="display:none;" id="pw-match-err">Passwords do not match.</span>
+        </div>
+        <div class="form-group" style="margin-bottom:18px;">
+          <label for="confirm_password">Confirm New Password</label>
+          <input type="password" id="confirm_password" name="confirm_password"
+                 autocomplete="new-password" required minlength="8">
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Update Password</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Username -->
+  <div class="card">
+    <div class="card-body">
+      <h2 style="font-size:.85rem; color:var(--navy); font-family:'Space Grotesk',sans-serif;
+                 font-weight:700; margin-bottom:18px; letter-spacing:.04em;">CHANGE USERNAME</h2>
+      <p style="font-size:.78rem; color:var(--text-dim); margin-bottom:16px;">
+        Current username: <strong>{{ username }}</strong>
+      </p>
+      <form method="post" action="{{ url_for('admin_settings') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="action" value="change_username">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="new_username">New Username</label>
+          <input type="text" id="new_username" name="new_username"
+                 value="{{ username }}" required autocomplete="off">
+        </div>
+        <div class="form-group" style="margin-bottom:18px;">
+          <label for="confirm_password_u">Confirm Password</label>
+          <input type="password" id="confirm_password_u" name="confirm_password_u"
+                 autocomplete="current-password" required
+                 placeholder="Enter your current password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Update Username</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<div class="card" style="margin-top:24px; max-width:760px; border-color:var(--line);">
+  <div class="card-body" style="font-size:.78rem; color:var(--text-dim); line-height:1.7;">
+    <strong style="color:var(--navy);">Admin Setup</strong> — To create a new admin account from the
+    command line, run: <code style="background:var(--panel); padding:2px 7px; border-radius:4px;
+    font-family:'JetBrains Mono',monospace;">python scripts/create_admin.py</code>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('confirm_password').addEventListener('input', function() {
+  const match = this.value === document.getElementById('new_password').value;
+  document.getElementById('pw-match-err').style.display = match ? 'none' : 'block';
+});
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+flask>=3.0
+flask-wtf>=1.2
+python-dotenv>=1.0
+werkzeug>=3.0
+gunicorn>=22.0
+xhtml2pdf>=0.2.17
+awsgi>=0.2.2
+psycopg2-binary>=2.9
+# WeasyPrint only used for local dev (Linux/Docker) — Lambda doesn't have GTK
+weasyprint>=61.0

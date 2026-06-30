@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login — Cookie's Academy Cert Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="brand">Cookie's Academy</div>
+      <div class="sub">// certificate manager · admin access</div>
+    </div>
+    <div class="login-body">
+      {% if error %}
+      <div class="login-error">{{ error }}</div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('login') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" autofocus autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required>
+        </div>
+        <div style="margin-top: 20px;">
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+            › Enter
+          </button>
+        </div>
+      </form>
+
+      <div style="margin-top:20px; text-align:center; font-size:.72rem; color:var(--text-dim);">
+        <a href="{{ url_for('verify') }}" style="color:var(--teal);">Verify a certificate →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
