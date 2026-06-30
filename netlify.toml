@@ -1,4 +1,5 @@
 [build]
+  command = "pip install -r netlify/functions/requirements.txt --target netlify/functions"
   publish = "public"
 
 [build.environment]
@@ -6,10 +7,8 @@
 
 [functions]
   directory = "netlify/functions"
-  # Bundle the Flask app files into the function so templates/static are available.
-  included_files = ["app.py", "auth.py", "models.py", "pdf_gen.py", "templates/**", "static/**", "data/**"]
+  included_files = ["app.py", "auth.py", "models.py", "pdf_gen.py", "templates/**", "static/**"]
 
-# Route every request through the Flask function.
 [[redirects]]
   from   = "/*"
   to     = "/.netlify/functions/api"
