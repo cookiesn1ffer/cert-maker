@@ -1,11 +1,12 @@
 [build]
   publish = "public"
-  functions = "netlify/functions"
 
 [build.environment]
   PYTHON_VERSION = "3.11"
 
 [functions]
+  directory = "netlify/functions"
+  runtime = "python-3.11"
   # Bundle the Flask app files into the function so templates/static are available.
   included_files = ["app.py", "auth.py", "models.py", "pdf_gen.py", "templates/**", "static/**", "data/**"]
 
