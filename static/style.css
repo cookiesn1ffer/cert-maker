@@ -454,7 +454,7 @@ textarea { resize: vertical; min-height: 70px; }
 /* signature */
 .cert-sig-row { display: flex; align-items: flex-end; }
 .cert-sig { display: flex; flex-direction: column; gap: 2px; }
-.cert-sig-img { height: 80px; width: auto; display: block; margin-bottom: -10px; }
+.cert-sig-img { height: 70px; width: auto; max-width: 120px; display: block; margin-bottom: -8px; object-fit: contain; }
 .cert-sig-line { width: 160px; height: 1.5px; background: #0d6e6e; opacity: .5; margin-bottom: 6px; }
 .cert-sig-name { font-size: .78rem; color: #16233a; font-weight: 600; }
 .cert-sig-role { font-size: .65rem; color: #0d6e6e; letter-spacing: .03em; }
