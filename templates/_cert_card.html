@@ -78,6 +78,7 @@
 
     .cert-sig-row { display: flex; justify-content: space-between; align-items: flex-end; }
     .cert-sig { display: flex; flex-direction: column; gap: 2px; }
+    .cert-sig-img { height: 52px; width: auto; display: block; margin-bottom: -6px; }
     .cert-sig-line { width: 140px; height: 1px; background: #dde1e7; margin-bottom: 6px; }
     .cert-sig-name { font-size: .78rem; color: #16233a; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
     .cert-sig-role { font-size: .65rem; color: #69707c; font-family: 'JetBrains Mono', monospace; }
@@ -177,6 +178,9 @@
 
     <div class="cert-sig-row">
       <div class="cert-sig">
+        {% if cert.signer_name == 'Aarush P' and sig_src %}
+        <img src="{{ sig_src }}" class="cert-sig-img" alt="">
+        {% endif %}
         <div class="cert-sig-line"></div>
         <div class="cert-sig-name">{{ cert.signer_name or '—' }}</div>
         <div class="cert-sig-role">{{ cert.signer_role or '' }}</div>

@@ -74,6 +74,9 @@
 
     <div class="cert-sig-row">
       <div class="cert-sig">
+        {% if cert.signer_name == 'Aarush P' %}
+        <img src="{{ url_for('static', filename='img/sig_aarush.png') }}" style="height:52px;width:auto;display:block;margin-bottom:-6px;" alt="">
+        {% endif %}
         <div class="cert-sig-line"></div>
         <div class="cert-sig-name">{{ cert.signer_name or '—' }}</div>
         <div class="cert-sig-role">{{ cert.signer_role or '' }}</div>

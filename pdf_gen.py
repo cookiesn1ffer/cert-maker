@@ -15,7 +15,10 @@ def generate_pdf(cert: dict) -> bytes:
     logo_path = pathlib.Path(os.path.abspath(os.path.join("static", "img", "logo.png")))
     logo_src = logo_path.as_uri() if logo_path.exists() else ""
 
-    html_content = render_template("_cert_card.html", cert=cert, pdf_mode=True, logo_src=logo_src)
+    sig_path = pathlib.Path(os.path.abspath(os.path.join("static", "img", "sig_aarush.png")))
+    sig_src = sig_path.as_uri() if sig_path.exists() else ""
+
+    html_content = render_template("_cert_card.html", cert=cert, pdf_mode=True, logo_src=logo_src, sig_src=sig_src)
 
     # Primary: WeasyPrint (Docker / Linux production)
     try:

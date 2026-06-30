@@ -65,10 +65,13 @@
                      oninput="syncPreview()">
             </div>
             <div class="form-group">
-              <label for="signer_name">Signer Name</label>
-              <input type="text" id="signer_name" name="signer_name"
-                     value="{{ form_data.signer_name }}"
-                     oninput="syncPreview()">
+              <label for="signer_name">Signed by</label>
+              <select id="signer_name" name="signer_name" onchange="syncPreview()">
+                <option value="">— select —</option>
+                <option value="Aarush P" {% if form_data.signer_name == 'Aarush P' %}selected{% endif %}>Aarush P</option>
+                <option value="Sourabh S" {% if form_data.signer_name == 'Sourabh S' %}selected{% endif %}>Sourabh S</option>
+                <option value="Dakshta M" {% if form_data.signer_name == 'Dakshta M' %}selected{% endif %}>Dakshta M</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="signer_role">Signer Role</label>
@@ -177,6 +180,7 @@
         </div>
         <div class="cert-sig-row">
           <div class="cert-sig">
+            <img id="pv-sig-img" src="{{ url_for('static', filename='img/sig_aarush.png') }}" style="height:52px;width:auto;display:none;margin-bottom:-6px;" alt="">
             <div class="cert-sig-line"></div>
             <div class="cert-sig-name" id="pv-signer">—</div>
             <div class="cert-sig-role" id="pv-role"></div>
@@ -212,8 +216,12 @@
     g('pv-name').textContent    = v('student_name') || '—';
     g('pv-course').textContent  = v('course_title') || '—';
     g('pv-date').textContent    = v('issue_date') || '—';
-    g('pv-signer').textContent  = v('signer_name') || '—';
+
+    const signerName = v('signer_name');
+    g('pv-signer').textContent  = signerName || '—';
     g('pv-role').textContent    = v('signer_role') || '';
+    const sigImg = document.getElementById('pv-sig-img');
+    if (sigImg) sigImg.style.display = signerName === 'Aarush P' ? 'block' : 'none';
 
     const prefix = v('prefix') || 'CA';
     g('pv-certid').textContent  = prefix + '-XXXX-XXXX';
